@@ -7,7 +7,7 @@ export default function Stats() {
         <RevealOnScroll>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
             <p className="text-[11px] text-white/50 uppercase tracking-[0.3em] max-w-xs">Since 2024</p>
-            <div className="flex gap-14">
+            <div className="grid grid-cols-2 gap-x-12 gap-y-6 sm:flex sm:gap-14">
               {[
                 { value: "50+", label: "Automations" },
                 { value: "98%", label: "Satisfaction" },

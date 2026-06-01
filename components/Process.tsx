@@ -57,14 +57,9 @@ const timelineData = [
 export default function Process() {
   return (
     <section id="process" className="relative border-t border-white/10 bg-black overflow-hidden">
-      {/* Orbital timeline — right side */}
-      <div className="absolute inset-0 md:left-[40%]">
-        <RadialOrbitalTimeline timelineData={timelineData} />
-      </div>
-
       {/* Heading — aligned to the same container as the rest of the site */}
-      <div className="relative z-20 max-w-6xl mx-auto px-8 md:px-16 pointer-events-none">
-        <div className="min-h-screen flex flex-col justify-center max-w-md">
+      <div className="relative z-20 max-w-6xl mx-auto px-8 md:px-16 md:pointer-events-none">
+        <div className="pt-20 pb-2 md:py-0 md:min-h-screen flex flex-col justify-center max-w-md">
           <h2 className="text-[2.5rem] md:text-[4rem] font-bold leading-[0.92] tracking-[-0.02em]">
             How it works.<br />Four steps.
           </h2>
@@ -73,6 +68,11 @@ export default function Process() {
             here&apos;s exactly how we take you from chaos to control.
           </p>
         </div>
+      </div>
+
+      {/* Orbital timeline — stacked below on mobile (scaled to fit), right side on desktop */}
+      <div className="relative -mt-16 origin-center [transform:scale(0.72)] md:-mt-0 md:transform-none md:absolute md:inset-0 md:left-[40%]">
+        <RadialOrbitalTimeline timelineData={timelineData} />
       </div>
     </section>
   );
