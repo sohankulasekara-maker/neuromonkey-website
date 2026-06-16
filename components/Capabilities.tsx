@@ -9,7 +9,7 @@ export default function Capabilities() {
         <RevealOnScroll>
           <div className="pt-20 pb-6 md:py-0 md:h-[600px] flex flex-col justify-center max-w-md">
             <h2 className="text-[2.5rem] md:text-[4rem] font-bold leading-[0.92] tracking-[-0.02em] text-white">
-              Our interactive<br />capabilities.
+              Interactive capabilities<br />with AI.
             </h2>
             <p className="mt-6 text-sm md:text-base text-white/60 leading-relaxed">
               Drag it, spin it, poke at it. This is the kind of living, responsive
