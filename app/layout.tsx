@@ -7,7 +7,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "NeuroMonkey AI — Smart Automation for Modern Businesses",
+  title: "Neuro Monkey",
   description: "We build intelligent automation systems that save you time, money, and headcount. AI-powered solutions for sales, marketing, customer service, and operations.",
 };
 
