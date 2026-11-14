@@ -57,13 +57,14 @@ const TEAM = [
 ];
 
 const CYCLE_MS = 3800;
-/** Each agent drops from a slightly different height and tilt. */
+/** Each agent drops from a slightly different height and tilt. Kept short
+    enough that they never fall through the heading above them. */
 const DROPS = [
-  { y: -260, rotate: -16 },
-  { y: -340, rotate: 12 },
-  { y: -220, rotate: -8 },
-  { y: -320, rotate: 14 },
-  { y: -280, rotate: -12 },
+  { y: -130, rotate: -16 },
+  { y: -170, rotate: 12 },
+  { y: -110, rotate: -8 },
+  { y: -160, rotate: 14 },
+  { y: -140, rotate: -12 },
 ];
 
 export default function Team() {

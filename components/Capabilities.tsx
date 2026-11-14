@@ -23,8 +23,10 @@ export default function Capabilities() {
       </div>
 
       {/* Spline — stacked below on mobile, full-bleed right half on desktop.
+          No space under it on phones: with a gap below, the robot's legs ended
+          in mid-air and it looked like it was flying. Now they meet the line.
           Left edge feathered (md only) so the glow blends into black. */}
-      <div className="relative z-0 h-[52vh] min-h-[340px] w-full pb-12 md:absolute md:inset-y-0 md:right-0 md:h-auto md:min-h-0 md:w-1/2 md:pb-0 md:[mask-image:linear-gradient(to_right,transparent,#000_28%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent,#000_28%)]">
+      <div className="relative z-0 h-[52vh] min-h-[340px] w-full md:absolute md:inset-y-0 md:right-0 md:h-auto md:min-h-0 md:w-1/2 md:[mask-image:linear-gradient(to_right,transparent,#000_28%)] md:[-webkit-mask-image:linear-gradient(to_right,transparent,#000_28%)]">
         <SplineScene scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="h-full w-full" transparent lightIntensity={1} />
       </div>
     </section>
