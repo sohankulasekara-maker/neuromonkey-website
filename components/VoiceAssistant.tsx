@@ -7,6 +7,11 @@ import Vapi from "@vapi-ai/web";
 const VAPI_PUBLIC_KEY = "15d31b97-6344-4c92-b857-1ac65e67de60";
 const VAPI_ASSISTANT_ID = "10ed7201-d782-45bd-9796-e43b658387dd";
 
+/** The prompt bubble shows the greeting, runs through the questions once, then goes quiet. */
+const GREET_AFTER_MS = 2000;
+const QUESTIONS_AFTER_MS = 7000;
+const QUESTION_MS = 4000;
+
 const TOOLTIP_MESSAGES = [
   "How can NeuroMonkey help your business?",
   "What AI solutions do you offer?",
@@ -20,6 +25,7 @@ export default function VoiceAssistant() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState("");
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [notice, setNotice] = useState("");
 
   const vapiRef = useRef<Vapi | null>(null);
   const ringRef = useRef<HTMLAudioElement | null>(null);
@@ -42,6 +48,10 @@ export default function VoiceAssistant() {
       vapiRef.current = vapi;
 
       vapi.on("call-start", () => {
+        if (cancelledRef.current) {
+          vapi.stop();
+          return;
+        }
         stopRinging();
         setIsConnecting(false);
         setIsCallActive(true);
@@ -75,17 +85,24 @@ export default function VoiceAssistant() {
     const greet = setTimeout(() => {
       setTooltipMessage("👋 Hey! Try our Voice AI assistant to learn about NeuroMonkey");
       setShowTooltip(true);
-    }, 2000);
+    }, GREET_AFTER_MS);
 
+    /* One pass through the questions, then hide: a bubble that never leaves
+       sits on top of the page content, worst of all on phones. */
     let cycle: ReturnType<typeof setInterval>;
     const start = setTimeout(() => {
       let i = 0;
       setTooltipMessage(TOOLTIP_MESSAGES[i]);
       cycle = setInterval(() => {
-        i = (i + 1) % TOOLTIP_MESSAGES.length;
+        i += 1;
+        if (i >= TOOLTIP_MESSAGES.length) {
+          clearInterval(cycle);
+          setShowTooltip(false);
+          return;
+        }
         setTooltipMessage(TOOLTIP_MESSAGES[i]);
-      }, 4000);
-    }, 7000);
+      }, QUESTION_MS);
+    }, QUESTIONS_AFTER_MS);
 
     return () => {
       clearTimeout(greet);
@@ -99,13 +116,17 @@ export default function VoiceAssistant() {
     if (!vapi) return;
 
     cancelledRef.current = false;
+    setNotice("");
     setIsConnecting(true);
 
+    /* This is only a permission check. Vapi opens its own microphone stream,
+       so release this one straight away or the mic light stays on. */
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const probe = await navigator.mediaDevices.getUserMedia({ audio: true });
+      probe.getTracks().forEach((track) => track.stop());
     } catch {
       setIsConnecting(false);
-      alert("Microphone permission is required to make a call");
+      setNotice("Please allow the microphone to start a call.");
       return;
     }
     if (cancelledRef.current) return;
@@ -114,10 +135,13 @@ export default function VoiceAssistant() {
 
     try {
       await vapi.start(VAPI_ASSISTANT_ID);
+      /* Cancel was pressed while the call was still connecting. */
+      if (cancelledRef.current) vapi.stop();
     } catch (e) {
       console.error("Failed to start call:", e);
       stopRinging();
       setIsConnecting(false);
+      setNotice("The call could not connect. Please try again.");
     }
   };
 
@@ -135,6 +159,7 @@ export default function VoiceAssistant() {
       endCall();
     } else if (isConnecting) {
       cancelledRef.current = true;
+      vapiRef.current?.stop();
       stopRinging();
       setIsConnecting(false);
     } else {
@@ -145,7 +170,12 @@ export default function VoiceAssistant() {
   const label = isCallActive ? "End Call" : isConnecting ? "Cancel" : "Ask Anything";
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-6 z-[90] flex flex-col items-end gap-3">
+      {notice && (
+        <p role="alert" className="max-w-[220px] rounded-2xl rounded-br-sm border border-white/15 bg-black/90 px-4 py-3 text-xs leading-snug text-white">
+          {notice}
+        </p>
+      )}
       {showTooltip && !isCallActive && !isConnecting && (
         <div className="relative max-w-[220px] rounded-2xl rounded-br-sm bg-gradient-to-br from-[#0000C8] to-[#A600C8] px-4 py-3 text-xs leading-snug text-white shadow-lg shadow-[#A600C8]/20">
           {tooltipMessage}
