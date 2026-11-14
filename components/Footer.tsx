@@ -2,7 +2,8 @@ import Image from "next/image";
 import { EMAIL, LOCATION, PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
 const SERVICES = ["Sales Automation", "Chatbots", "Social Media", "Development", "Analytics", "Custom AI"];
-const LINK = "block text-[11px] text-white/60 transition-colors hover:text-white";
+/* Tall enough to tap comfortably on a phone. */
+const LINK = "block py-2.5 text-[11px] text-white/60 transition-colors hover:text-white md:py-1";
 
 export default function Footer() {
   return (
@@ -18,7 +19,7 @@ export default function Footer() {
 
           <div>
             <p className="font-code mb-4 text-[10px] uppercase tracking-[0.3em] text-white/50">Services</p>
-            <div className="space-y-2">
+            <div>
               {SERVICES.map((service) => (
                 <a key={service} href="#services" className={LINK}>{service}</a>
               ))}
@@ -27,10 +28,10 @@ export default function Footer() {
 
           <div>
             <p className="font-code mb-4 text-[10px] uppercase tracking-[0.3em] text-white/50">Contact</p>
-            <div className="space-y-2">
+            <div>
               <a href={`mailto:${EMAIL}`} className={LINK}>{EMAIL}</a>
               <a href={`tel:${PHONE_TEL}`} className={LINK}>{PHONE_DISPLAY}</a>
-              <p className="text-[11px] text-white/60">{LOCATION}</p>
+              <p className="py-2.5 text-[11px] text-white/60 md:py-1">{LOCATION}</p>
             </div>
           </div>
         </div>

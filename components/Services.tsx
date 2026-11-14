@@ -121,7 +121,7 @@ export default function Services() {
                 href={whatsappLink(`Hi NeuroMonkey, I'd like to know more about ${service.tag}.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group mt-7 inline-flex items-center gap-2 border-b border-white/30 pb-1 text-sm text-white/80 transition-colors hover:border-white hover:text-white"
+                className="group mt-5 inline-flex items-center gap-2 border-b border-white/30 py-2.5 text-sm text-white/80 transition-colors hover:border-white hover:text-white"
               >
                 Ask about this
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />

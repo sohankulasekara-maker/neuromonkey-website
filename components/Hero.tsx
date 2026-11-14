@@ -55,9 +55,10 @@ export default function Hero() {
 
   return (
     <section onPointerMove={onPointerMove} className="relative flex min-h-[100svh] items-start overflow-hidden pt-32 md:items-center md:pt-0">
-      {/* Yakira: bottom right. On phones she sits under the text, never behind it. */}
+      {/* Yakira: bottom right. On phones her width is capped by the screen height
+          (36.5svh wide is 50svh tall), so she sits under the text, never behind it. */}
       <motion.div
-        className="pointer-events-none absolute bottom-0 right-[-6%] w-[96%] max-w-[440px] md:right-[5%] md:w-[46%] md:max-w-[620px]"
+        className="pointer-events-none absolute bottom-0 right-[-4%] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
         style={isReduced ? undefined : { y: imageY, scale: imageScale, opacity: fade }}
       >
         <motion.div style={{ x: leanX, y: leanY }}>

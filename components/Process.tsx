@@ -54,14 +54,14 @@ export default function Process() {
 
   return (
     <section id="process" ref={ref} className="relative border-t border-white/10" style={{ height: pinnedHeight(COUNT, VH_PER_STEP) }}>
-      <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden">
+      <div className="sticky top-0 flex h-[100svh] items-start overflow-hidden pt-24 md:items-center md:pt-0">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-6 px-8 md:grid-cols-2 md:gap-10 md:px-16">
           <div>
             <h2 className="text-[2.2rem] font-bold leading-[0.92] tracking-[-0.02em] md:text-[4rem]">
               How it works.<br />Four steps.
             </h2>
 
-            <StepContent stepKey={active} direction={direction} className="mt-6 min-h-[170px] md:mt-10 md:min-h-[190px]">
+            <StepContent stepKey={active} direction={direction} className="mt-5 min-h-[150px] md:mt-10 md:min-h-[190px]">
               <p className="font-code text-[11px] uppercase tracking-[0.3em] text-white/60">
                 <span className="text-[#C45CFF]">Step 0{active + 1}</span> · {step.label}
               </p>
@@ -71,7 +71,7 @@ export default function Process() {
           </div>
 
           {/* The orbit */}
-          <div className="relative mx-auto aspect-square w-[min(300px,72vw,40svh)] md:w-[min(420px,38vw,60svh)]">
+          <div className="relative mx-auto aspect-square w-[min(300px,72vw,34svh)] md:w-[min(420px,38vw,60svh)]">
             <div className="absolute inset-0 rounded-full border border-white/10" />
             <div className="absolute inset-[18%] rounded-full border border-dashed border-white/[0.07]" />
 
