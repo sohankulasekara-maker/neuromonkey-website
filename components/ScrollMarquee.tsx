@@ -5,7 +5,7 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "fr
 
 /**
  * A band of huge words that slides sideways as the page scrolls. `reverse`
- * sends it the other way; `outline` draws hollow letters.
+ * sends it the other way; `outline` is the big band with no ribbon behind it, its words filled with the brand gradient.
  */
 const REPEATS = 8;
 const TRAVEL_PERCENT = 22;
@@ -39,7 +39,7 @@ export default function ScrollMarquee({
         <motion.div className={`flex w-max items-center gap-8 whitespace-nowrap md:gap-12 ${outline ? "py-4 md:py-6" : "py-2 md:py-2.5"}`} style={isReduced ? undefined : { x }}>
           {line.map((word, i) => (
             <span key={`${word}-${i}`} className="flex items-center gap-8 md:gap-12">
-              <span className={`font-bold uppercase leading-none ${outline ? "text-outline text-[2.6rem] tracking-[-0.02em] md:text-[6rem]" : "text-base tracking-[0.04em] text-white md:text-2xl"}`}>
+              <span className={`font-bold uppercase leading-none ${outline ? "text-brand-fill text-[2.6rem] tracking-[-0.02em] md:text-[6rem]" : "text-base tracking-[0.04em] text-white md:text-2xl"}`}>
                 {word}
               </span>
               <span className={`font-code ${outline ? "text-xl text-[#A600C8] md:text-4xl" : "text-sm text-white/70 md:text-lg"}`}>✦</span>

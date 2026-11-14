@@ -97,16 +97,12 @@ html, body, main, footer { overflow-x: clip; }
   background-clip: text;
 }
 
-/* Hollow letters for the outline marquee */
-.text-outline {
-  /* Brand gradient outline: the gradient is clipped to the letters, the fill
-     paints black over their insides, and the see-through stroke lets the
-     gradient show around the edge. */
+/* Big marquee words, filled with the brand gradient (blue to purple) */
+.text-brand-fill {
   background: linear-gradient(90deg, #0000C8, #A600C8);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: 3px transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Card glow that follows the pointer (components/SpotlightCard.tsx) */
