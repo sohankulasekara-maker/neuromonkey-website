@@ -13,10 +13,13 @@ import Magnetic from "./Magnetic";
  */
 
 /** Each line: its words, which word is highlighted, and where it exits to. */
+/* 23 Nov 2026: the headline names both halves of the business, websites and
+   automation. It read "We automate the stuff your team shouldn't be doing
+   manually." */
 const LINES = [
-  { words: ["We", "automate", "the", "stuff"], exitX: -260 },
-  { words: ["your", "team", "shouldn't", "be"], highlight: "shouldn't", exitX: 260 },
-  { words: ["doing", "manually."], exitX: -180 },
+  { words: ["We", "build", "websites"], exitX: -260 },
+  { words: ["and", "automate", "the", "work"], exitX: 260 },
+  { words: ["your", "team", "shouldn't", "do."], highlight: "shouldn't", exitX: -180 },
 ];
 
 /** A fixed tilt per word, so the drop looks hand-thrown but never changes between renders. */
