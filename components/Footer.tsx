@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { EMAIL, LOCATION, PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
-const SERVICES = ["Sales Automation", "Chatbots", "Social Media", "Development", "Analytics", "Custom AI"];
+const SERVICES = ["Web Development", "Sales Automation", "Chatbots", "Social Media", "App Development", "Analytics", "Custom AI"];
 /* Tall enough to tap comfortably on a phone. */
 const LINK = "block py-2.5 text-[11px] text-white/60 transition-colors hover:text-white md:py-1";
 
@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <Image src="/logo.png" alt="NeuroMonkey AI" width={80} height={80} className="mb-4 h-20 w-20 object-contain" />
             <p className="max-w-xs text-[11px] leading-relaxed text-white/60">
-              Smart Automation for Modern Businesses. We build AI systems that save time, reduce costs, and scale your operations.
+              Web Development and AI Automation for Modern Businesses. We build websites and AI systems that save time, reduce costs, and scale your operations.
             </p>
           </div>
 

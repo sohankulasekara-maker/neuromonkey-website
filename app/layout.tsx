@@ -11,7 +11,7 @@ const code = Google_Sans_Code({ subsets: ["latin"], variable: "--font-code" });
 
 export const metadata: Metadata = {
   title: "Neuro Monkey",
-  description: "We build intelligent automation systems that save you time, money, and headcount. AI-powered solutions for sales, marketing, customer service, and operations.",
+  description: "Web development and AI automation. We build fast custom websites and intelligent automation systems that save you time, money, and headcount across sales, marketing, customer service, and operations.",
 };
 
 export const viewport: Viewport = { themeColor: "#000000" };

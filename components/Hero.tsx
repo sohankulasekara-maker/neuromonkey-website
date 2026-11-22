@@ -67,6 +67,23 @@ export default function Hero() {
       </motion.div>
 
       <div className="relative z-10 w-full px-8 md:px-16 md:pl-[12%]">
+        {/* 23 Nov 2026: names the two things we sell, above the headline. The
+            scroll fade sits on the outer element and the entrance on the inner
+            one: both on one element would write into the shared fade value and
+            blank the headline. */}
+        <motion.p
+          className="font-code mb-5 text-[11px] uppercase tracking-[0.3em] text-white/70 md:text-xs"
+          style={isReduced ? undefined : { opacity: fade }}
+        >
+          <motion.span
+            className="inline-block"
+            initial={isReduced ? false : { opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Web Development <span className="text-[#C45CFF]">+</span> AI Automation
+          </motion.span>
+        </motion.p>
         <h1 className="max-w-3xl text-[clamp(1.55rem,7vw,2.6rem)] font-bold leading-[1] tracking-[-0.02em] text-white md:text-[3rem] lg:text-[4rem] lg:leading-[0.95]">
           {LINES.map((line, lineIndex) => (
             <motion.span key={line.words.join(" ")} className="block whitespace-nowrap" style={isReduced ? undefined : { x: lineX[lineIndex], opacity: fade }}>

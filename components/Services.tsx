@@ -11,11 +11,14 @@ import { whatsappLink } from "@/lib/contact";
  * while scrolling turns a wheel of six numbered stops; each stop brings its
  * service in and sends the last one out.
  */
+/* 23 Nov 2026: web development leads the list. The site sells two things,
+   websites and AI automation, and both are named in the hero. */
 const SERVICES = [
+  { title: "Websites that bring in bookings and sales", description: "Booking sites, online stores and brand sites, built in custom code with Next.js. Not WordPress templates. Fast on a phone, and yours to own.", tag: "Web Development" },
   { title: "Your sales team closes more, does less", description: "We build AI that scores leads, writes follow-ups, and books meetings. Your reps just show up and close.", tag: "Sales Automation" },
   { title: "Customers get answers at 3am", description: "Custom chatbots on WhatsApp, your website, or Instagram. They sound human because we train them on your actual conversations.", tag: "Chatbots" },
   { title: "Social media that runs itself", description: "Content generated, scheduled, and posted. We handle Instagram, Facebook, LinkedIn, and TikTok. You approve, we publish.", tag: "Social Media" },
-  { title: "Websites and apps that load fast", description: "Built with Next.js and React Native. Not WordPress templates. Actual custom code that performs.", tag: "Development" },
+  { title: "Apps that load fast", description: "Mobile and web apps built with React Native and Next.js. Actual custom code that performs.", tag: "App Development" },
   { title: "Dashboards your accountant will love", description: "Real-time reports, expense tracking, cash flow predictions. No more end-of-month surprises.", tag: "Data & Analytics" },
   { title: "Something weird and specific? We build that too.", description: "Invoice scanner that reads Sinhala? Inventory system that talks to WhatsApp? If you can explain it, we can automate it.", tag: "Custom AI" },
 ];
