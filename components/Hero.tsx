@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import ConsoleFeed from "./ConsoleFeed";
 import Magnetic from "./Magnetic";
@@ -37,14 +37,10 @@ export default function Hero() {
     useTransform(scrollY, [0, SCROLL_RANGE], [0, LINES[2].exitX]),
   ];
   const extrasY = useTransform(scrollY, [0, SCROLL_RANGE], [0, 160]);
-  const imageY = useTransform(scrollY, [0, SCROLL_RANGE], [0, 110]);
-  const imageScale = useTransform(scrollY, [0, SCROLL_RANGE], [1, 1.08]);
 
   /* The portrait leans a little away from the pointer. */
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
-  const leanX = useSpring(pointerX, { stiffness: 60, damping: 18 });
-  const leanY = useSpring(pointerY, { stiffness: 60, damping: 18 });
 
   const onPointerMove = (event: React.PointerEvent<HTMLElement>) => {
     if (event.pointerType !== "mouse" || isReduced) return;
@@ -61,14 +57,13 @@ export default function Hero() {
           (36.5svh wide is 50svh tall), so she sits under the text, never behind it. */}
       <motion.div
         className="pointer-events-none absolute bottom-0 right-[-4%] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
-        style={isReduced ? undefined : { y: imageY, scale: imageScale }}
       >
-        <motion.div style={{ x: leanX, y: leanY }}>
+        <div>
           {/* 26 Nov 2026 (immersive-3d): a transparent cutout, so the WebGL glass
               form glows behind her. The old photo had a black box, hidden with
               an edge-fade mask. */}
           <Image src="/yakira-hero-cutout.webp" alt="Yakira, NeuroMonkey AI" width={864} height={1184} className="h-auto w-full" priority />
-        </motion.div>
+        </div>
       </motion.div>
 
       <div className="relative z-10 w-full px-8 md:px-16 md:pl-[12%]">
