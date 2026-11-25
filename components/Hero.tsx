@@ -61,7 +61,7 @@ export default function Hero() {
           (36.5svh wide is 50svh tall), so she sits under the text, never behind it. */}
       <motion.div
         className="pointer-events-none absolute bottom-0 right-[-4%] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
-        style={isReduced ? undefined : { y: imageY, scale: imageScale, opacity: fade }}
+        style={isReduced ? undefined : { y: imageY, scale: imageScale }}
       >
         <motion.div style={{ x: leanX, y: leanY }}>
           {/* 26 Nov 2026 (immersive-3d): a transparent cutout, so the WebGL glass
