@@ -71,7 +71,7 @@ export default function Process() {
           </div>
 
           {/* The orbit */}
-          <div className="relative mx-auto aspect-square w-[min(300px,72vw,34svh)] md:w-[min(420px,38vw,60svh)]">
+          <div data-immersive-anchor="process-orbit" className="relative mx-auto aspect-square w-[min(300px,72vw,34svh)] md:w-[min(420px,38vw,60svh)]">
             <div className="absolute inset-0 rounded-full border border-white/10" />
             <div className="absolute inset-[18%] rounded-full border border-dashed border-white/[0.07]" />
 

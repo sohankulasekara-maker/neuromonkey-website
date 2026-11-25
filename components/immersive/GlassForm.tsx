@@ -17,8 +17,11 @@ const DETAIL_DESKTOP = 40;
 const DETAIL_MOBILE = 20;
 /** Glass radius as a share of the Services wheel's radius (orbs reach about 1.35x this). */
 const WHEEL_FILL = 0.5;
-/** Glass radius in the How it works gap (about 120px wide between text and orbit). */
-const PROCESS_RADIUS_PX = 40;
+/* How it works: behind the 64px step-number disc, about 1.75x its diameter,
+   so it glows out around it. Capped so the orbs (1.35x the glass radius)
+   stay inside the dashed inner ring (0.64 of the orbit's radius). */
+const PROCESS_RADIUS_PX = 56;
+const PROCESS_MAX_SHARE_OF_ORBIT = 0.42;
 /* Orbs are brighter than 1 so bloom picks them up. */
 const ORB_BLUE = new THREE.Color("#2b2bff").multiplyScalar(5);
 const ORB_PURPLE = new THREE.Color("#c020ff").multiplyScalar(5);
@@ -81,12 +84,18 @@ export default function GlassForm({ state }: { state: SceneState }) {
 
     const { width, height } = viewport.getCurrentViewport();
     const from = heroLayout(width, height);
-    const { wheel, processEnter, processCenterY } = state.stage;
+    const { wheel, processOrbit, processEnter } = state.stage;
     const wheelPose = travelLayout(width, height, wheel);
     /* Desktop only (phones have no wheel and the form is gone by then):
        leave the wheel for the middle of How it works as it scrolls in. */
     const move = wheel ? processEnter * processEnter * (3 - 2 * processEnter) : 0;
-    const processPose = { x: 0, y: (processCenterY * height) / 2, size: (PROCESS_RADIUS_PX / canvasSize.height) * height };
+    const processPose = processOrbit
+      ? {
+          x: (processOrbit.x * width) / 2,
+          y: (processOrbit.y * height) / 2,
+          size: Math.min((PROCESS_RADIUS_PX / canvasSize.height) * height, processOrbit.radius * height * PROCESS_MAX_SHARE_OF_ORBIT),
+        }
+      : wheelPose;
     const to = {
       x: THREE.MathUtils.lerp(wheelPose.x, processPose.x, move),
       y: THREE.MathUtils.lerp(wheelPose.y, processPose.y, move),

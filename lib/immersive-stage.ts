@@ -5,12 +5,27 @@
  *  1. Hero: the glass form glows behind Yakira.
  *  2. Services: scrolling out of the hero carries it into the centre of the
  *     Services wheel, where it stays at full strength through 01 to 07.
- *  3. How it works: it slides into the clear gap in the middle of that
- *     section and fades slowly as its steps play, gone before Capabilities.
+ *  3. How it works: it slides into the centre of the steps orbit, glowing
+ *     out from behind the step-number disc, and fades slowly as the steps
+ *     play, gone before Capabilities.
  *  4. Contact: a dark iridescent form rises in with the contact section and
  *     floats beside it until the page ends.
  * Between acts nothing is visible, so the render loop stops.
  */
+
+/** A round page element the form can sit inside, in viewport pixels. */
+export interface AnchorBox {
+  centerX: number;
+  centerY: number;
+  radius: number;
+}
+
+/** An anchor in clip space (-1 to 1); radius as a share of screen height. */
+export interface Anchor {
+  x: number;
+  y: number;
+  radius: number;
+}
 
 export interface StageInput {
   scrollY: number;
@@ -21,7 +36,9 @@ export interface StageInput {
   /** How far the pinned Services section scrolls (its height minus one screen). */
   servicesTravel: number;
   /** The Services wheel's box, relative to the viewport. Null when hidden (phones). */
-  wheel: { centerX: number; centerY: number; radius: number } | null;
+  wheel: AnchorBox | null;
+  /** The How it works orbit's box, relative to the viewport. */
+  processOrbit: AnchorBox | null;
   /** The How it works section's box, relative to the viewport. Null if missing. */
   process: { top: number; height: number } | null;
   /** The contact section's box, relative to the viewport. Null if missing. */
@@ -36,13 +53,13 @@ export interface Stage {
   servicesProgress: number;
   heroOpacity: number;
   /** The Services wheel in clip space (-1 to 1); radius as a share of screen height. Null on phones. */
-  wheel: { x: number; y: number; radius: number } | null;
+  wheel: Anchor | null;
+  /** The How it works steps orbit, in clip space. */
+  processOrbit: Anchor | null;
   /** 0 while How it works is below the screen, 1 once it has pinned. */
   processEnter: number;
   /** 0 when How it works pins, 1 when it lets go (Capabilities is next). */
   processProgress: number;
-  /** The middle of the How it works screen, in clip space. */
-  processCenterY: number;
   /** 0 before the contact section enters, 1 once it is well on screen. */
   contactProgress: number;
   contactOpacity: number;
@@ -73,18 +90,15 @@ export function smoothstep(edge0: number, edge1: number, value: number): number 
 }
 
 export function computeStage(input: StageInput): Stage {
-  const { scrollY, viewportWidth, viewportHeight, heroEnd, servicesTravel, wheel, process, contactTop, contactHeight } = input;
+  const { scrollY, viewportWidth, viewportHeight, heroEnd, servicesTravel, wheel, processOrbit, process, contactTop, contactHeight } = input;
+  const toClip = (box: AnchorBox | null): Anchor | null =>
+    box ? { x: (2 * box.centerX) / viewportWidth - 1, y: 1 - (2 * box.centerY) / viewportHeight, radius: box.radius / viewportHeight } : null;
   const heroProgress = clamp01(scrollY / Math.max(1, heroEnd));
   const servicesProgress = clamp01((scrollY - heroEnd) / Math.max(1, servicesTravel));
   const isNarrow = viewportWidth <= NARROW_MAX_PX;
   const processEnter = process ? clamp01((viewportHeight - process.top) / viewportHeight) : 0;
   const processTravel = process ? Math.max(1, process.height - viewportHeight) : 1;
   const processProgress = process ? clamp01(-process.top / processTravel) : 0;
-  /* The pinned screen's middle: it rides in with the section, holds while
-     pinned, then leaves with it. */
-  const processMidPx = process
-    ? Math.min(Math.max(process.top, 0), process.top + process.height - viewportHeight) + viewportHeight / 2
-    : viewportHeight * 2;
   const heroOpacity = isNarrow
     ? (1 - (1 - NARROW_TRAVEL_OPACITY) * smoothstep(0.2, 0.6, heroProgress)) *
       (1 - smoothstep(NARROW_SERVICES_FADE.start, NARROW_SERVICES_FADE.end, servicesProgress))
@@ -99,18 +113,24 @@ export function computeStage(input: StageInput): Stage {
   return {
     heroProgress,
     servicesProgress,
-    wheel: wheel
-      ? { x: (2 * wheel.centerX) / viewportWidth - 1, y: 1 - (2 * wheel.centerY) / viewportHeight, radius: wheel.radius / viewportHeight }
-      : null,
+    wheel: toClip(wheel),
+    processOrbit: toClip(processOrbit),
     heroOpacity,
     processEnter,
     processProgress,
-    processCenterY: 1 - (2 * processMidPx) / viewportHeight,
     contactProgress,
     contactOpacity,
     contactCenterY,
     isActive: heroOpacity > VISIBLE_EPSILON || contactOpacity > VISIBLE_EPSILON,
   };
+}
+
+/** A marked element's centre and radius. Null when missing or hidden.
+    A rotated circle's bounding box keeps the same centre, so turning never moves it. */
+function readAnchor(name: string): AnchorBox | null {
+  const rect = document.querySelector(`[data-immersive-anchor='${name}']`)?.getBoundingClientRect();
+  if (!rect || rect.width === 0) return null;
+  return { centerX: rect.left + rect.width / 2, centerY: rect.top + rect.height / 2, radius: Math.min(rect.width, rect.height) / 2 };
 }
 
 /** Reads the live page into a StageInput. Browser only. */
@@ -120,9 +140,7 @@ export function readStageInput(): StageInput {
   const processRect = document.getElementById("process")?.getBoundingClientRect() ?? null;
   const scrollY = window.scrollY;
   const servicesRect = services?.getBoundingClientRect() ?? null;
-  /* A rotated circle's bounding box keeps the same centre, so turning the wheel never moves this. */
-  const wheelRect = document.querySelector("[data-immersive-anchor='services-wheel']")?.getBoundingClientRect() ?? null;
-  const hasWheel = wheelRect !== null && wheelRect.width > 0;
+
   const contactRect = contact?.getBoundingClientRect() ?? null;
   return {
     scrollY,
@@ -130,9 +148,8 @@ export function readStageInput(): StageInput {
     viewportHeight: window.innerHeight,
     heroEnd: servicesRect ? servicesRect.top + scrollY : window.innerHeight,
     servicesTravel: servicesRect ? servicesRect.height - window.innerHeight : window.innerHeight,
-    wheel: hasWheel
-      ? { centerX: wheelRect.left + wheelRect.width / 2, centerY: wheelRect.top + wheelRect.height / 2, radius: Math.min(wheelRect.width, wheelRect.height) / 2 }
-      : null,
+    wheel: readAnchor("services-wheel"),
+    processOrbit: readAnchor("process-orbit"),
     process: processRect ? { top: processRect.top, height: processRect.height } : null,
     contactTop: contactRect ? contactRect.top : null,
     contactHeight: contactRect ? contactRect.height : 0,
