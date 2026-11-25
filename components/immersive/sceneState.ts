@@ -14,7 +14,7 @@ export interface SceneState {
 
 export function createSceneState(isLowPower: boolean): SceneState {
   return {
-    stage: computeStage({ scrollY: 0, viewportWidth: 1, viewportHeight: 1, heroEnd: 1, servicesTravel: 1, wheel: null, contactTop: null, contactHeight: 0 }),
+    stage: computeStage({ scrollY: 0, viewportWidth: 1, viewportHeight: 1, heroEnd: 1, servicesTravel: 1, wheel: null, process: null, contactTop: null, contactHeight: 0 }),
     pointer: { x: 0, y: 0 },
     isLowPower,
   };
