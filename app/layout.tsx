@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Google_Sans_Code, Inter } from "next/font/google";
 import NeuralField from "@/components/NeuralField";
+import ImmersiveLayer from "@/components/immersive/ImmersiveLayer";
+import SectionDots from "@/components/SectionDots";
 import ScrollProgress from "@/components/ScrollProgress";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
@@ -22,7 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-black text-white">
         {/* The star field: fixed behind every section of the site. */}
         <NeuralField className="fixed inset-0 -z-10" />
+        {/* The WebGL layer (glass form in the hero, iridescent form by contact),
+            loaded after first paint. Sits above the star field, below content. */}
+        <ImmersiveLayer />
         <ScrollProgress />
+        <SectionDots />
         <SmoothScroll>{children}</SmoothScroll>
         {/* The "Ask Anything" voice button (components/VoiceAssistant.tsx) is off:
             the Vapi account ran out of credit on 14 Nov 2026, so every call failed.

@@ -5,6 +5,7 @@ import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTran
 import { ArrowDown, ArrowRight } from "lucide-react";
 import ConsoleFeed from "./ConsoleFeed";
 import Magnetic from "./Magnetic";
+import { MaskedWord } from "./KineticText";
 
 /**
  * Hero (rebuilt 14 Nov 2026). Each word drops into place on load. Scrolling
@@ -22,8 +23,6 @@ const LINES = [
   { words: ["your", "team", "shouldn't", "do."], highlight: "shouldn't", exitX: -180 },
 ];
 
-/** A fixed tilt per word, so the drop looks hand-thrown but never changes between renders. */
-const TILTS = [-14, 9, -6, 12, 7, -11, 15, -8, 10, -13];
 const SCROLL_RANGE = 700;
 const WORD_STAGGER_S = 0.07;
 const PARALLAX_PX = 18;
@@ -57,11 +56,14 @@ export default function Hero() {
   let wordIndex = 0;
 
   return (
-    <section onPointerMove={onPointerMove} className="relative flex min-h-[100svh] items-start overflow-hidden pt-32 md:items-center md:pt-0">
+    <section id="top" onPointerMove={onPointerMove} className="relative flex min-h-[100svh] items-start overflow-hidden pt-32 md:items-center md:pt-0">
       {/* Yakira: bottom right. On phones her width is capped by the screen height
           (36.5svh wide is 50svh tall), so she sits under the text, never behind it. */}
       <motion.div
-        className="pointer-events-none absolute bottom-0 right-[-4%] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
+        /* -z-[6]: just under the WebGL layer (-z-[5], screen-blended), so the
+           glass form can float in front of her arm and laptop. Its black
+           clear colour blends to nothing, so she looks exactly as before. */
+        className="pointer-events-none absolute bottom-0 right-[-4%] -z-[6] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
         style={isReduced ? undefined : { y: imageY, scale: imageScale, opacity: fade }}
       >
         <motion.div style={{ x: leanX, y: leanY }}>
@@ -94,15 +96,11 @@ export default function Hero() {
                 const index = wordIndex;
                 wordIndex += 1;
                 return (
-                  <motion.span
-                    key={word}
-                    className={`mr-[0.25em] inline-block ${word === line.highlight ? "gradient-text" : ""}`}
-                    initial={isReduced ? false : { y: -140, rotate: TILTS[index % TILTS.length], opacity: 0 }}
-                    animate={{ y: 0, rotate: 0, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 190, damping: 15, delay: 0.15 + index * WORD_STAGGER_S }}
-                  >
+                  /* 26 Nov 2026 (immersive-3d): words rise out of a mask, one
+                     after another. They used to drop in from above with a tilt. */
+                  <MaskedWord key={word} index={index} onLoad delay={0.2} stagger={WORD_STAGGER_S} className={`mr-[0.25em] ${word === line.highlight ? "gradient-text" : ""}`}>
                     {word}
-                  </motion.span>
+                  </MaskedWord>
                 );
               })}
             </motion.span>

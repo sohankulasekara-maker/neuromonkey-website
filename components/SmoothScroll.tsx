@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
-import { prefersReducedMotion, setLenis } from "@/lib/lenis-store";
+import { emitFrame, prefersReducedMotion, setLenis } from "@/lib/lenis-store";
 
 /** Height of the fixed navbar, so a section heading never hides under it. */
 const NAV_OFFSET = 0; // globals.css already gives every section a scroll-margin for the navbar
@@ -20,6 +20,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     let frame = 0;
     const raf = (time: number) => {
       lenis.raf(time);
+      emitFrame(time);
       frame = requestAnimationFrame(raf);
     };
     frame = requestAnimationFrame(raf);

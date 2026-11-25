@@ -1,5 +1,6 @@
 import Fall from "./Fall";
 import SpotlightCard from "./SpotlightCard";
+import KineticText from "./KineticText";
 
 const TESTIMONIALS = [
   { quote: "They built our chatbot in 10 days. It handles 80% of queries without a human. Support costs dropped by half.", name: "Sarah Mitchell", company: "UK Retail Group" },
@@ -20,7 +21,7 @@ export default function Testimonials() {
       <div className="mx-auto max-w-6xl px-8 md:px-16">
         <Fall from={{ x: -120, rotate: -3 }} to={{ x: -80 }}>
           <h2 className="mb-16 text-[2.5rem] font-bold leading-[0.92] tracking-[-0.02em] md:mb-20 md:text-[4rem]">
-            Don&apos;t take our<br />word for it.
+            <KineticText lines={["Don't take our", "word for it."]} />
           </h2>
         </Fall>
 

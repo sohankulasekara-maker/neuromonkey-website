@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Fall from "./Fall";
 import Magnetic from "./Magnetic";
+import KineticText from "./KineticText";
 import { EMAIL, PHONE_DISPLAY, PHONE_TEL, whatsappLink } from "@/lib/contact";
 
 const SECONDARY = "group flex items-center justify-between border border-white/10 bg-black/80 px-8 py-5 text-sm text-white/60 transition-colors hover:border-white/30 hover:text-white";
@@ -12,7 +13,7 @@ export default function CTA() {
       <div className="mx-auto grid max-w-6xl items-end gap-12 px-8 md:grid-cols-2 md:gap-16 md:px-16">
         <Fall from={{ x: -120, rotate: -3 }} to={false}>
           <h2 className="mb-4 text-[2.5rem] font-bold leading-[0.92] tracking-[-0.02em] md:text-[4rem]">
-            Let&apos;s talk about what&apos;s slowing you down.
+            <KineticText lines={["Let's talk about", "what's slowing", "you down."]} highlight="slowing" />
           </h2>
           <p className="text-sm text-white/60">If we can&apos;t help, we&apos;ll tell you. We&apos;d rather say no than waste your time.</p>
         </Fall>
