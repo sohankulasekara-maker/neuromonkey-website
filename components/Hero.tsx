@@ -56,18 +56,18 @@ export default function Hero() {
   let wordIndex = 0;
 
   return (
-    <section id="top" onPointerMove={onPointerMove} className="relative flex min-h-[100svh] items-start overflow-hidden pt-32 md:items-center md:pt-0">
+    <section onPointerMove={onPointerMove} className="relative flex min-h-[100svh] items-start overflow-hidden pt-32 md:items-center md:pt-0">
       {/* Yakira: bottom right. On phones her width is capped by the screen height
           (36.5svh wide is 50svh tall), so she sits under the text, never behind it. */}
       <motion.div
-        /* -z-[6]: just under the WebGL layer (-z-[5], screen-blended), so the
-           glass form can float in front of her arm and laptop. Its black
-           clear colour blends to nothing, so she looks exactly as before. */
-        className="pointer-events-none absolute bottom-0 right-[-4%] -z-[6] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
+        className="pointer-events-none absolute bottom-0 right-[-4%] w-[min(96%,440px,36.5svh)] md:right-[5%] md:w-[46%] md:max-w-[620px]"
         style={isReduced ? undefined : { y: imageY, scale: imageScale, opacity: fade }}
       >
         <motion.div style={{ x: leanX, y: leanY }}>
-          <Image src="/yakira-hero.png" alt="Yakira, NeuroMonkey AI" width={864} height={1184} className="h-auto w-full [mask-image:linear-gradient(to_right,transparent,#000_16%,#000_90%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_16%,#000_90%,transparent)]" priority />
+          {/* 26 Nov 2026 (immersive-3d): a transparent cutout, so the WebGL glass
+              form glows behind her. The old photo had a black box, hidden with
+              an edge-fade mask. */}
+          <Image src="/yakira-hero-cutout.webp" alt="Yakira, NeuroMonkey AI" width={864} height={1184} className="h-auto w-full" priority />
         </motion.div>
       </motion.div>
 

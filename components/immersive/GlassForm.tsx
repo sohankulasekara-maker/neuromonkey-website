@@ -15,15 +15,17 @@ import { damp, MAX_DELTA, type SceneState } from "./sceneState";
 
 const DETAIL_DESKTOP = 40;
 const DETAIL_MOBILE = 20;
+/** Glass radius as a share of the Services wheel's radius (orbs reach about 1.35x this). */
+const WHEEL_FILL = 0.5;
 /* Orbs are brighter than 1 so bloom picks them up. */
 const ORB_BLUE = new THREE.Color("#2b2bff").multiplyScalar(5);
 const ORB_PURPLE = new THREE.Color("#c020ff").multiplyScalar(5);
 const RING_COLOR = new THREE.Color("#6a2bff").multiplyScalar(1.1);
 const ORBS = [
-  { color: ORB_BLUE, radius: 1.25, speed: 0.35, phase: 0, size: 0.16 },
-  { color: ORB_PURPLE, radius: 1.45, speed: -0.28, phase: 2.1, size: 0.22 },
+  { color: ORB_BLUE, radius: 1.2, speed: 0.35, phase: 0, size: 0.15 },
+  { color: ORB_PURPLE, radius: 1.3, speed: -0.28, phase: 2.1, size: 0.2 },
   { color: ORB_PURPLE, radius: 1.1, speed: 0.5, phase: 4.2, size: 0.09 },
-  { color: ORB_BLUE, radius: 1.6, speed: -0.2, phase: 5.3, size: 0.12 },
+  { color: ORB_BLUE, radius: 1.35, speed: -0.2, phase: 5.3, size: 0.12 },
 ];
 
 interface Layout {
@@ -35,17 +37,20 @@ interface Layout {
 /** Where the form sits at the top of the page, in world units. */
 function heroLayout(width: number, height: number): Layout {
   const isPortrait = width / height < 0.8;
-  /* Phones: right edge, between the buttons and the top of her head. */
-  if (isPortrait) return { x: width * 0.38, y: height * 0.07, size: width * 0.24 };
-  /* Desktop: in the gap between the headline and the portrait, in front of
-     her arm and laptop, well clear of her face. */
-  return { x: width * 0.1, y: -height * 0.18, size: Math.min(height * 0.2, width * 0.13) };
+  /* Behind Yakira's shoulders (her cutout is layered on top of the canvas),
+     big enough that the glass and its orbs glow out around her. */
+  if (isPortrait) return { x: width * 0.12, y: -height * 0.2, size: width * 0.34 };
+  return { x: width * 0.27, y: height * 0.04, size: Math.min(height * 0.22, width * 0.15) };
 }
 
-/** Where scrolling carries it before it fades. */
-function travelLayout(width: number, height: number): Layout {
+/** Where scrolling carries it: beside the Services wheel, where it fades. */
+function travelLayout(width: number, height: number, wheel: SceneState["stage"]["wheel"]): Layout {
+  /* Desktop: centred in the Services wheel, following it as it scrolls in.
+     Sized so the glass and its orbs stay inside the ring. */
+  if (wheel) return { x: (wheel.x * width) / 2, y: (wheel.y * height) / 2, size: wheel.radius * height * WHEEL_FILL };
   const isPortrait = width / height < 0.8;
-  if (isPortrait) return { x: -width * 0.32, y: -height * 0.2, size: width * 0.16 };
+  /* Phones have no wheel: the empty space under the service text. */
+  if (isPortrait) return { x: -width * 0.25, y: -height * 0.36, size: width * 0.16 };
   return { x: -width * 0.36, y: -height * 0.2, size: Math.min(height * 0.12, width * 0.08) };
 }
 
@@ -73,7 +78,7 @@ export default function GlassForm({ state }: { state: SceneState }) {
 
     const { width, height } = viewport.getCurrentViewport();
     const from = heroLayout(width, height);
-    const to = travelLayout(width, height);
+    const to = travelLayout(width, height, state.stage.wheel);
     const t = heroProgress * heroProgress * (3 - 2 * heroProgress);
     const early = Math.sqrt(t);
     const s = spin.current;
@@ -146,7 +151,7 @@ export default function GlassForm({ state }: { state: SceneState }) {
         ))}
       </group>
       <mesh position={[0, 0, -0.9]} rotation={[Math.PI * 0.42, 0, 0]}>
-        <torusGeometry args={[1.2, 0.01, 12, 160]} />
+        <torusGeometry args={[1.05, 0.01, 12, 160]} />
         <meshBasicMaterial color={RING_COLOR} toneMapped={false} />
       </mesh>
     </group>

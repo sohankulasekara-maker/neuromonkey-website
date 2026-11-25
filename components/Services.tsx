@@ -60,6 +60,7 @@ export default function Services() {
             {/* Wheel: laptop and up */}
             <div className="relative mt-6 hidden md:block" style={{ height: WHEEL_WINDOW }} aria-hidden="true">
               <motion.div
+                data-immersive-anchor="services-wheel"
                 className="absolute rounded-full border border-white/10"
                 style={{ width: WHEEL_SIZE, height: WHEEL_SIZE, left: -WHEEL_SIZE * 0.62, top: WHEEL_WINDOW / 2 - WHEEL_SIZE / 2, rotate: isReduced ? -(active * STEP_DEG) : turn }}
               >

@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Google_Sans_Code, Inter } from "next/font/google";
 import NeuralField from "@/components/NeuralField";
 import ImmersiveLayer from "@/components/immersive/ImmersiveLayer";
-import SectionDots from "@/components/SectionDots";
 import ScrollProgress from "@/components/ScrollProgress";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
@@ -28,7 +27,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             loaded after first paint. Sits above the star field, below content. */}
         <ImmersiveLayer />
         <ScrollProgress />
-        <SectionDots />
         <SmoothScroll>{children}</SmoothScroll>
         {/* The "Ask Anything" voice button (components/VoiceAssistant.tsx) is off:
             the Vapi account ran out of credit on 14 Nov 2026, so every call failed.
